@@ -1,0 +1,70 @@
+@startuml
+' =======================
+' Observer Pattern
+' =======================
+interface Observer {
+  +update(status)
+}
+
+class Rider implements Observer {
+  +update(status)
+}
+
+class RideRequest {
+  -observers : List<Observer>
+  +subscribe(observer)
+  +unsubscribe(observer)
+  +setStatus(status)
+  +notify()
+}
+
+RideRequest "1" --> "*" Observer : notifies >
+
+' =======================
+' Strategy Pattern
+' =======================
+interface FareStrategy {
+  +calculate(distance)
+}
+
+class NormalFare implements FareStrategy
+class SurgePricing implements FareStrategy
+class DiscountedFare implements FareStrategy
+
+class FareCalculator {
+  -strategy : FareStrategy
+  +setStrategy(strategy)
+  +calculateFare(distance)
+}
+
+FareCalculator --> FareStrategy
+FareStrategy <|.. NormalFare
+FareStrategy <|.. SurgePricing
+FareStrategy <|.. DiscountedFare
+
+' =======================
+' Command Pattern
+' =======================
+interface Command {
+  +execute()
+}
+
+class RideService {
+  +bookRide()
+  +cancelRide()
+  +rateRide()
+}
+
+class BookRideCommand implements Command
+class CancelRideCommand implements Command
+class RateRideCommand implements Command
+
+Command <|.. BookRideCommand
+Command <|.. CancelRideCommand
+Command <|.. RateRideCommand
+
+BookRideCommand --> RideService
+CancelRideCommand --> RideService
+RateRideCommand --> RideService
+
+@enduml
